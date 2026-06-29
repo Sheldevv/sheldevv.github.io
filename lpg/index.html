@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License Plate Generator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1e1e1e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background: #2c2c2c;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,.3);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        #plate {
+            font-size: 2rem;
+            margin: 20px 0;
+            font-family: monospace;
+            letter-spacing: 3px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background: #4CAF50;
+            color: white;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>License Plate Generator</h1>
+
+    <div id="plate">---</div>
+
+    <button onclick="generate()">Generate Plate</button>
+</div>
+
+<script>
+function randomLetters() {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let result = "";
+
+    for (let i = 0; i < 3; i++) {
+        result += alphabet[Math.floor(Math.random() * alphabet.length)];
+    }
+
+    return result;
+}
+
+function randomNumbers() {
+    let result = "";
+
+    for (let i = 0; i < 4; i++) {
+        result += Math.floor(Math.random() * 10);
+    }
+
+    return result;
+}
+
+function genPlate() {
+    return `${randomLetters()}-${randomNumbers()}`;
+}
+
+function generate() {
+    let existing = JSON.parse(localStorage.getItem("plates") || "[]");
+    let plate;
+
+    do {
+        plate = genPlate();
+    } while (existing.includes(plate));
+
+    existing.push(plate);
+    localStorage.setItem("plates", JSON.stringify(existing));
+
+    document.getElementById("plate").textContent = plate;
+}
+
+generate();
+</script>
+
+</body>
+</html>
